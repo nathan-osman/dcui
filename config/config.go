@@ -6,5 +6,5 @@ import (
 
 // Config provides storage for the DCUI configuration.
 type Config struct {
-	Server server.Config `json:"server"`
+	Server *server.Config `json:"server"`
 }
