@@ -1,5 +1,7 @@
 package server
 
+//go:generate go-bindata -pkg server static templates
+
 import (
 	"crypto/tls"
 
