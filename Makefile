@@ -6,14 +6,14 @@ BINDATA = $(shell find server/static server/templates)
 
 all: dist/${CMD}
 
-dist/${CMD}: ${SOURCES} server/bindata.go
+dist/${CMD}: ${SOURCES} server/ab0x.go
 	CGO_ENABLED=0 go build -o dist/${CMD} ${PKG}/cmd/${CMD}
 
-server/bindata.go: ${BINDATA}
-	go generate ${PKG}/...
+server/ab0x.go: ${BINDATA} b0x.yaml
+	fileb0x b0x.yaml
 
 clean:
 	@rm -f dist/${CMD}
-	@rm -f server/bindata.go
+	@rm -f server/ab0x.go
 
 .PHONY: clean

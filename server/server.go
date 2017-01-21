@@ -1,9 +1,8 @@
 package server
 
-//go:generate go-bindata -pkg server static templates
-
 import (
 	"crypto/tls"
+	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/hectane/go-asyncserver"
@@ -37,6 +36,7 @@ func New(config *Config) (*Server, error) {
 		}
 	}
 	s.server.Handler = r
+	r.PathPrefix("/static").Handler(http.FileServer(HTTP))
 	if err := s.server.Start(); err != nil {
 		return nil, err
 	}
