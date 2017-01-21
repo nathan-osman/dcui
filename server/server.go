@@ -36,6 +36,7 @@ func New(config *Config) (*Server, error) {
 		}
 	}
 	s.server.Handler = r
+	r.HandleFunc("/", s.index)
 	r.PathPrefix("/static").Handler(http.FileServer(HTTP))
 	if err := s.server.Start(); err != nil {
 		return nil, err
