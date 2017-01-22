@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Home Page</h1>
+    <h1>
+        DCUI<br>
+        <small>Docker Compose User Interface</small>
+    </h1>
+    <br>
+    <div class="row">
+        {% for s in services %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ s.Name }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            {% for k, v in s %}
+                                <tr>
+                                    <th>{{ k }}</th>
+                                    <td>{{ v }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

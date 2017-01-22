@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"path"
 	"syscall"
 
 	"github.com/nathan-osman/dcui/docker"
@@ -19,9 +20,18 @@ type Config struct {
 
 func main() {
 
+	// Obtain current working directory
+	c, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Default configuration
 	config := &Config{
-		Docker: &docker.Config{},
+		Docker: &docker.Config{
+			Filename:    "docker-compose.yml",
+			ProjectName: path.Base(c),
+		},
 		Server: &server.Config{
 			Addr: ":8000",
 		},
@@ -32,8 +42,14 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Load the Docker Compose project
+	d, err := docker.New(config.Docker)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Start the server
-	s, err := server.New(config.Server)
+	s, err := server.New(config.Server, d)
 	if err != nil {
 		log.Fatal(err)
 	}

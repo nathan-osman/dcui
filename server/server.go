@@ -6,19 +6,22 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/hectane/go-asyncserver"
+	"github.com/nathan-osman/dcui/docker"
 )
 
 // Server provides the web interface for DCUI.
 type Server struct {
 	config *Config
+	docker *docker.Docker
 	server *server.AsyncServer
 }
 
 // New creates a new server with the specified configuration.
-func New(config *Config) (*Server, error) {
+func New(config *Config, docker *docker.Docker) (*Server, error) {
 	var (
 		s = &Server{
 			config: config,
+			docker: docker,
 			server: server.New(config.Addr),
 		}
 		r = mux.NewRouter()
