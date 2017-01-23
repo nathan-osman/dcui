@@ -51,6 +51,7 @@ func (s *Server) render(w http.ResponseWriter, r *http.Request, templateName str
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	ctx["alerts"] = getAlerts()
 	d, err := t.ExecuteBytes(ctx)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

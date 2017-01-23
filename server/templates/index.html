@@ -1,30 +1,69 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>
-        DCUI<br>
-        <small>Docker Compose User Interface</small>
-    </h1>
-    <br>
-    <div class="row">
-        {% for s in services %}
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ s.Name }}</h3>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table">
-                            {% for k, v in s %}
-                                <tr>
-                                    <th>{{ k }}</th>
-                                    <td>{{ v }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
+    {% macro actions(class, s=nil) %}
+        <form action="/action" method="post">
+            {% if s == nil %}
+                {% set s = "All" %}
+            {% else %}
+                <input type="hidden" name="service" value="{{ s }}">
+            {% endif %}
+            <div class="{{ class }}">
+                <button class="btn btn-default" type="submit"
+                        name="action" value="build"
+                        title="Build {{ s }}">
+                    <span class="glyphicon glyphicon-wrench"></span>
+                </button>
+                <button class="btn btn-default" type="submit"
+                        name="action" value="create"
+                        title="Create {{ s }}">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+                <button class="btn btn-success" type="submit"
+                        name="action" value="start"
+                        title="Start {{ s }}">
+                    <span class="glyphicon glyphicon-play"></span>
+                </button>
+                <button class="btn btn-danger" type="submit"
+                        name="action" value="stop"
+                        title="Stop {{ s }}">
+                    <span class="glyphicon glyphicon-stop"></span>
+                </button>
             </div>
-        {% endfor %}
+        </form>
+    {% endmacro %}
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>DCUI</h1>
+        </div>
+        <div class="col-sm-6 text-right">
+            <br>
+            {{ actions("btn-group") }}
+        </div>
     </div>
+    <br>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Service</th>
+            <th>State</th>
+            <th></th>
+        </tr>
+        {% for s in services %}
+            <tr>
+                <td>{{ s.Name }}</td>
+                <td>{{ s.State }}</td>
+                <td class="text-right">
+                    {{ actions("btn-group btn-group-xs", s.Name) }}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">
+                    <p class="text-muted text-center">
+                        No Services
+                    </p>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
