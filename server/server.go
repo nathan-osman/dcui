@@ -40,6 +40,7 @@ func New(config *Config, docker *docker.Docker) (*Server, error) {
 	}
 	s.server.Handler = r
 	r.HandleFunc("/", s.index)
+	r.HandleFunc("/action", s.action)
 	r.PathPrefix("/static").Handler(http.FileServer(HTTP))
 	if err := s.server.Start(); err != nil {
 		return nil, err

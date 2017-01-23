@@ -9,6 +9,7 @@ import (
 // ServiceStatus represents the status of a particular service.
 type ServiceStatus struct {
 	Name  string
+	Image string
 	State string
 }
 
@@ -36,6 +37,7 @@ func (d *Docker) Status() ([]*ServiceStatus, error) {
 		s, _ := stateMap[v.ContainerName]
 		statusList = append(statusList, &ServiceStatus{
 			Name:  k,
+			Image: v.Image,
 			State: s,
 		})
 	}
